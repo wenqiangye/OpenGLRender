@@ -1,3 +1,0 @@
-/home/yesky/code/OpenGLProjects/OpenGLRender/OpenGLRender/build/CMakeFiles/rebuild_cache.dir
-/home/yesky/code/OpenGLProjects/OpenGLRender/OpenGLRender/build/CMakeFiles/edit_cache.dir
-/home/yesky/code/OpenGLProjects/OpenGLRender/OpenGLRender/build/CMakeFiles/openglrender.dir
