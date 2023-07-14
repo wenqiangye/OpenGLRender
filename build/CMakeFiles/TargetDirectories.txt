@@ -1,3 +1,0 @@
-G:/OpenGL_Render/OpenGLRender/build/CMakeFiles/openglrender.dir
-G:/OpenGL_Render/OpenGLRender/build/CMakeFiles/ALL_BUILD.dir
-G:/OpenGL_Render/OpenGLRender/build/CMakeFiles/ZERO_CHECK.dir
