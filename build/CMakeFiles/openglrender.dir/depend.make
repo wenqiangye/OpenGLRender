@@ -47,5 +47,6 @@ CMakeFiles/openglrender.dir/src/unix/main.cpp.o: ../imgui/backends/imgui_impl_gl
 CMakeFiles/openglrender.dir/src/unix/main.cpp.o: ../imgui/backends/imgui_impl_opengl3.h
 CMakeFiles/openglrender.dir/src/unix/main.cpp.o: ../imgui/imconfig.h
 CMakeFiles/openglrender.dir/src/unix/main.cpp.o: ../imgui/imgui.h
+CMakeFiles/openglrender.dir/src/unix/main.cpp.o: ../src/unix/app.hpp
 CMakeFiles/openglrender.dir/src/unix/main.cpp.o: ../src/unix/main.cpp
 
