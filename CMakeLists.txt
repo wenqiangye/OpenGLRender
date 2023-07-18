@@ -8,7 +8,11 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/header
 )
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
 
 if(APPLE)
     include_directories(
@@ -17,10 +21,18 @@ if(APPLE)
         /opt/homebrew/include
     )
 endif()
+find_package(OpenGL REQUIRED)
+find_package(Boost REQUIRED COMPONENTS filesystem)
 
+if(NOT Boost_FOUND)
+    message("Not Found Boost")
+endif()
 file(GLOB SRC 
     ./imgui/*.h
-    ./imgui/*.cpp    
+    ./imgui/*.cpp  
+    ./src/header/*.h
+    ./src/header/*.cpp  
+    ./src/header/glad.c
 )
 
 if(WIN32)
@@ -74,6 +86,7 @@ elseif (UNIX AND NOT APPLE)
 
     # linux: sudo apt install libglfw3-dev
     target_link_libraries(${PROJECT_NAME}
+        ${Boost_LIBRARIES}
         GL
         glfw # use this lib name
         dl

@@ -9,10 +9,13 @@
 #include <stdio.h>
 #include <cstdlib>
 
+#include <iostream>
+#include <glad/glad.h>
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
+// #include <glad/glad.h>
 #endif
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
@@ -32,6 +35,9 @@ static void glfw_error_callback(int error, const char *description)
 {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
+// settings
+const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_HEIGHT = 720;
 
 class App
 {
@@ -57,19 +63,28 @@ public:
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // Required on Mac
 #else
         // GL 3.0 + GLSL 130
-        const char *glsl_version = "#version 130";
+        const char *glsl_version = "#version 330";
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-        // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-        // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
+                                                                       // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
         // Create window with graphics context
-        window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
+        window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
         if (window == nullptr)
             exit(1);
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // Enable vsync
+
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        // glad: load all OpenGL function pointers
+        // ---------------------------------------
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            std::cout << "Failed to initialize GLAD" << std::endl;
+            exit(1);
+        }
 
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -103,10 +118,6 @@ public:
         // io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
         // ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
         // IM_ASSERT(font != nullptr);
-
-        // Our state
-        bool show_demo_window = true;
-        bool show_another_window = false;
     }
     virtual ~App()
     {
@@ -147,13 +158,17 @@ public:
             glClear(GL_COLOR_BUFFER_BIT);
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+            Render();
+
             glfwSwapBuffers(window);
         }
     }
     virtual void Update() = 0;
     virtual void StartUp() = 0;
+    virtual void Render() = 0;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 private:
+protected:
     GLFWwindow *window;
 };
