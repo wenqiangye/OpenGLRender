@@ -60,6 +60,7 @@ public:
 
 private:
     bool control_window = true;
+    bool render_window = true;
     bool show_demo_window  = true;
     Model ourmodel;
     Shader shader;
