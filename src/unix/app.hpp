@@ -214,6 +214,7 @@ public:
 private:
 protected:
     GLFWwindow *window;
+    GLFWwindow *sencewindow;
 };
 
 void processInput(GLFWwindow *window)
