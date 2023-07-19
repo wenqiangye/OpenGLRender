@@ -6,21 +6,31 @@
 #include "model.h"
 #include "mesh.h"
 
-// camear
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMourse = true;
-// timing
-float deltaTime = 0.0f; // time between current frame and last frame
-float lastFrame = 0.0f;
 
 class Myapp : public App
 {
 public:
     Myapp() = default;
     ~Myapp() = default;
+    void processInput(GLFWwindow *window)
+    {
+        ImGuiIO &io = ImGui::GetIO();
+        (void)io;
+        bool down = false;
+        io.AddKeyEvent(ImGuiKey_Escape, down);
+        
+        if (down == true)
+            this->~Myapp();
 
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            camera.ProcessKeyboard(FORWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            camera.ProcessKeyboard(BACKWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            camera.ProcessKeyboard(LEFT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
     virtual void StartUp() final
     {
         shader = Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs", "../src/shader/baopo/baopo.gs");
@@ -29,22 +39,14 @@ public:
 
     virtual void Update() final
     {
-        processInput(App::window);
-
         static float f = 0.0f;
         static int counter = 0;
 
         ImGui::Begin("OpenGL Render", &control_window); // Create a window called "Hello, world!" and append into it.
 
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        
         ImGui::End();
     }
 
@@ -63,52 +65,6 @@ public:
         ourmodel.Draw(shader);
     }
 
-    void processInput(GLFWwindow *window)
-    {
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
-
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            camera.ProcessKeyboard(FORWARD, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            camera.ProcessKeyboard(BACKWARD, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            camera.ProcessKeyboard(LEFT, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            camera.ProcessKeyboard(RIGHT, deltaTime);
-    }
-
-    void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
-    {
-        float xpos = static_cast<float>(xposIn);
-        float ypos = static_cast<float>(yposIn);
-
-        if (firstMourse)
-        {
-            lastX = xpos;
-            lastY = ypos;
-            firstMourse = false;
-        }
-
-        float xoffset = xpos - lastX;
-        float yoffset = lastY - ypos;
-
-        lastX = xpos;
-        lastY = ypos;
-        camera.ProcessMouseMovement(xoffset, yoffset);
-    }
-    void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
-    {
-        camera.ProcessMouseScroll(static_cast<float>(yoffset));
-    }
-
-    void framebuffer_size_callback(GLFWwindow *window, int width, int height)
-    {
-        // make sure the viewport matches the new window dimensions; note that width and
-        // height will be significantly larger than specified on retina displays.
-        glViewport(0, 0, width, height);
-    }
-
 private:
     bool control_window = true;
     Model ourmodel;
@@ -122,6 +78,8 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+
 
 /*
 // std::cout<<show_demo_window<<std::endl;
