@@ -12,25 +12,6 @@ class Myapp : public App
 public:
     Myapp() = default;
     ~Myapp() = default;
-    void processInput(GLFWwindow *window)
-    {
-        ImGuiIO &io = ImGui::GetIO();
-        (void)io;
-        bool down = false;
-        io.AddKeyEvent(ImGuiKey_Escape, down);
-        
-        if (down == true)
-            this->~Myapp();
-
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            camera.ProcessKeyboard(FORWARD, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            camera.ProcessKeyboard(BACKWARD, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            camera.ProcessKeyboard(LEFT, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            camera.ProcessKeyboard(RIGHT, deltaTime);
-    }
     virtual void StartUp() final
     {
         shader = Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs", "../src/shader/baopo/baopo.gs");
@@ -46,7 +27,7 @@ public:
 
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        
+
         ImGui::End();
     }
 
