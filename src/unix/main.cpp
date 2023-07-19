@@ -20,6 +20,9 @@ public:
 
     virtual void Update() final
     {
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+
         static float f = 0.0f;
         static int counter = 0;
 
@@ -27,15 +30,16 @@ public:
 
         // ImGui::Button("reset",ImVec2(0,0));
         if(ImGui::Button("reset",ImVec2(0,0))) {
-            scale = glm::vec3(1.0f);
+            scale =1.0;
             translate = glm::vec3(0.0f);
         }
 
-        ImGui::SliderFloat3("scale", glm::value_ptr(scale), 0.0f, 2.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::SliderFloat("scale", &scale, 0.0f, 2.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::SliderFloat3("translate", glm::value_ptr(translate), -10.0f, 10.0f); 
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
         ImGui::End();
+
     }
 
     virtual void Render() final
@@ -43,7 +47,7 @@ public:
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 1.0f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::scale(model, scale);
+        model = glm::scale(model, glm::vec3(scale,scale,scale));
         view = glm::translate(view, translate);
         shader.use();
         shader.setMat4("projection", projection);
@@ -56,9 +60,10 @@ public:
 
 private:
     bool control_window = true;
+    bool show_demo_window  = true;
     Model ourmodel;
     Shader shader;
-    glm::vec3 scale = glm::vec3(1.0f);
+    float scale = 1.0;
     glm::vec3 translate = glm::vec3(0.0f);
 };
 
