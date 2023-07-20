@@ -93,6 +93,13 @@ public:
         glfwSetScrollCallback(window, scroll_callback);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
+        sencewindow = glfwCreateWindow(960, 640, "sence", NULL, NULL);
+        if (!sencewindow)
+        {
+            glfwTerminate();
+            exit(1);
+        }
+
         // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         // glad: load all OpenGL function pointers
         // ---------------------------------------
