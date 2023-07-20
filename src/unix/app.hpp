@@ -81,7 +81,12 @@ public:
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
                                                                        // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
-
+        // sencewindow = glfwCreateWindow(960, 640, "sence", NULL, NULL);
+        // if (!sencewindow)
+        // {
+        //     glfwTerminate();
+        //     exit(1);
+        // }
         // Create window with graphics context
         window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
         if (window == nullptr)
@@ -92,13 +97,6 @@ public:
         glfwSetCursorPosCallback(window, mouse_callback);
         glfwSetScrollCallback(window, scroll_callback);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-        sencewindow = glfwCreateWindow(960, 640, "sence", NULL, NULL);
-        if (!sencewindow)
-        {
-            glfwTerminate();
-            exit(1);
-        }
 
         // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         // glad: load all OpenGL function pointers
@@ -221,7 +219,7 @@ public:
 private:
 protected:
     GLFWwindow *window;
-    GLFWwindow *sencewindow;
+    // GLFWwindow *sencewindow;
 };
 
 void processInput(GLFWwindow *window)

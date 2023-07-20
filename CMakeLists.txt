@@ -53,6 +53,9 @@ elseif(UNIX)
         ./imgui/backends/imgui_impl_glfw.*
         ./imgui/backends/imgui_impl_opengl3.*
         ./src/unix/main.cpp
+        ./src/control/*.h
+        ./src/control/*.cpp
+
     )
 endif()
 
