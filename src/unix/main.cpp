@@ -32,8 +32,10 @@ public:
         if(ImGui::Button("reset",ImVec2(0,0))) {
             scale =1.0;
             translate = glm::vec3(0.0f);
+            clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
         }
 
+        ImGui::ColorEdit3("background", (float*)&clear_color);
         ImGui::SliderFloat("scale", &scale, 0.0f, 2.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::SliderFloat3("translate", glm::value_ptr(translate), -10.0f, 10.0f); 
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -61,7 +63,7 @@ public:
 private:
     bool control_window = true;
     bool render_window = true;
-    bool show_demo_window  = true;
+    bool show_demo_window  = false;
     Model ourmodel;
     Shader shader;
     float scale = 1.0;
