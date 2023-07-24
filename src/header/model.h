@@ -39,9 +39,10 @@ public:
     vector<Mesh> meshes;
     string directory;
     bool gammaCorrection;
-
-    Model(){}
     
+    Model() {
+
+    }
     Model(string const &path, bool gamma = false):gammaCorrection(gamma)
     {
         loadModel(path);

@@ -15,7 +15,7 @@ public:
     virtual void StartUp() final
     {
         shader = Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs", "../src/shader/baopo/baopo.gs");
-        ourmodel = Model(boost::filesystem::absolute("../asset/model/nanosuit/nanosuit.obj").c_str());
+        ourmodel = Model(boost::filesystem::absolute("../asset/model/nanosuit/nanosuit.obj").string().c_str());
     }
 
     virtual void Update() final
