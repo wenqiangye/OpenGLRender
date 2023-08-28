@@ -129,6 +129,7 @@ elseif (UNIX AND NOT APPLE)
         glfw # use this lib name
         dl
         assimp
+        libpthread.so
     )
 endif()
 

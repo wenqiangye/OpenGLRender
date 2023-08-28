@@ -56,6 +56,7 @@ class App
 public:
     App()
     {
+        threadpool->setThreadCount(10);
         glfwSetErrorCallback(glfw_error_callback);
         if (!glfwInit())
             exit(1);
@@ -161,7 +162,6 @@ public:
     void Run()
     {
         StartUp();
-
         while (!glfwWindowShouldClose(window))
         {
             // Poll and handle events (inputs, window resize, etc.)
@@ -220,6 +220,7 @@ private:
 
 protected:
     GLFWwindow *window;
+    vks::ThreadPool* threadpool = new vks::ThreadPool();
     // GLFWwindow *sencewindow;
 };
 
