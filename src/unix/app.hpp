@@ -56,6 +56,7 @@ class App
 public:
     App()
     {
+        threadpool->setThreadCount(10);
         glfwSetErrorCallback(glfw_error_callback);
         if (!glfwInit())
             exit(1);
@@ -161,7 +162,6 @@ public:
     void Run()
     {
         StartUp();
-
         while (!glfwWindowShouldClose(window))
         {
             // Poll and handle events (inputs, window resize, etc.)
@@ -217,8 +217,10 @@ public:
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 private:
+
 protected:
     GLFWwindow *window;
+    vks::ThreadPool* threadpool = new vks::ThreadPool();
     // GLFWwindow *sencewindow;
 };
 

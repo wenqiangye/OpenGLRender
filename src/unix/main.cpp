@@ -5,7 +5,7 @@
 #include "shader.h"
 #include "model.h"
 #include "mesh.h"
-
+#include "threadpool.hpp"
 
 class Myapp : public App
 {
@@ -14,7 +14,7 @@ public:
     ~Myapp() = default;
     virtual void StartUp() final
     {
-        shader = Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs", "../src/shader/baopo/baopo.gs");
+        shader = Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs");
         ourmodel = Model(boost::filesystem::absolute("../asset/model/nanosuit/nanosuit.obj").c_str());
     }
 
@@ -55,7 +55,6 @@ public:
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
         shader.setMat4("model", model);
-
         shader.setFloat("time", static_cast<float>(glfwGetTime()));
         ourmodel.Draw(shader);
     }
@@ -74,7 +73,6 @@ int main(int argc, char *argv[])
 {
     Myapp app;
     app.Run();
-
     return 0;
 }
 
