@@ -55,7 +55,6 @@ public:
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
         shader.setMat4("model", model);
-
         shader.setFloat("time", static_cast<float>(glfwGetTime()));
         ourmodel.Draw(shader);
     }

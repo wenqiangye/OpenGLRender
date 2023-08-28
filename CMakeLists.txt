@@ -9,6 +9,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/src/header
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/render
 )
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
@@ -50,7 +51,10 @@ file(GLOB SRC
     ./imgui/*.h
     ./imgui/*.cpp  
     ./src/header/*.h
-    ./src/header/*.cpp  
+    ./src/header/*.cpp 
+    ./src/header/*.hpp
+    ./src/render/*.cpp
+    ./src/render/*.h 
     ./src/header/glad.c
 )
 
