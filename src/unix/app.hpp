@@ -10,6 +10,8 @@
 #include <glad/glad.h>
 #include <iostream>
 #include "camera.h"
+#include "threadpool.hpp"
+#include "light.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -36,6 +38,7 @@ static void glfw_error_callback(int error, const char *description)
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+void mouse_default(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 // settings
@@ -56,7 +59,7 @@ class App
 public:
     App()
     {
-        threadpool->setThreadCount(10);
+        // threadpool->setThreadCount(10);
         glfwSetErrorCallback(glfw_error_callback);
         if (!glfwInit())
             exit(1);
@@ -113,6 +116,7 @@ public:
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();
         (void)io;
+        
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
@@ -155,7 +159,7 @@ public:
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
-
+        threadpool->~ThreadPool();
         glfwDestroyWindow(window);
         glfwTerminate();
     }
@@ -216,11 +220,10 @@ public:
     virtual void Render() = 0;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-private:
-
+public:
+    vks::ThreadPool* threadpool = new vks::ThreadPool();
 protected:
     GLFWwindow *window;
-    vks::ThreadPool* threadpool = new vks::ThreadPool();
     // GLFWwindow *sencewindow;
 };
 
@@ -228,7 +231,6 @@ void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         camera.ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -237,8 +239,19 @@ void processInput(GLFWwindow *window)
         camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
+
+    // if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) {
+    //     glfwSetCursorPosCallback(window, mouse_default);
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_RELEASE) {
+    //     glfwSetCursorPosCallback(window, mouse_callback); 
+    // }
+        
 }
 
+void mouse_default(GLFWwindow *window, double xpos, double ypos) {
+
+}
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
 {
     float xpos = static_cast<float>(xposIn);
