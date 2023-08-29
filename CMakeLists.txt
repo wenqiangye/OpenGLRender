@@ -28,6 +28,9 @@ if(WIN32)
 set(BOOST_ROOT "D:\\boost\\boost_1_82_0")    # 指定Boost库的根目录
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
+set(BOOST_INCLUDEDIR "D:\\boost\\boost_1_82_0\\boost")
+set(BOOST_LIBRARYDIR "D:\\boost\\boost_1_82_0\\stage\\lib")
+set(Boost_LIB_PREFIX "lib")
 set(Boost_ARCHITECTURE "-x64")
 
 #添加glad
@@ -42,7 +45,7 @@ link_directories(
 )
 endif()
 
-find_package(Boost REQUIRED COMPONENTS filesystem)
+find_package(Boost 1.82.0 REQUIRED COMPONENTS filesystem)
 
 if(NOT Boost_FOUND)
     message("Not Found Boost")
