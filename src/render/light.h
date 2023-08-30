@@ -105,13 +105,13 @@ class LightSpot:public Light
 {
 public:
     float cosPhyInner = glm::cos(glm::radians(12.5f));
-	float cosPhyOuter = glm::cos(glm::radians(15.0f));
+	float cosPhyOuter = glm::cos(glm::radians(17.5f));
     //衰减
 	float constant = 1.0f;
 	float linear=0.09f;
 	float quadratic=0.032f;
 public:
-    LightSpot(glm::vec3 _postion, glm::vec3 _direction_, glm::vec3 _angles, glm::vec3 _ambient, glm::vec3 _diffuse, glm::vec3 _specular,float _cosPhyInner = glm::cos(glm::radians(12.5f)), float _cosPhyOuter = glm::cos(glm::radians(12.5f)))
+    LightSpot(glm::vec3 _postion, glm::vec3 _direction_, glm::vec3 _angles, glm::vec3 _ambient, glm::vec3 _diffuse, glm::vec3 _specular,float _cosPhyInner = glm::cos(glm::radians(12.5f)), float _cosPhyOuter = glm::cos(glm::radians(17.5f)))
     :Light(_postion,glm::vec3(1.0f,1.0f,1.0f),_angles,_ambient,_diffuse,_specular), cosPhyInner(_cosPhyInner), cosPhyOuter(_cosPhyOuter)
     {
 

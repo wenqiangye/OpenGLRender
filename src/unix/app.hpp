@@ -194,6 +194,7 @@ public:
             Render();
 
             Update();
+
             // Rendering
             ImGui::Render();
             int display_w, display_h;

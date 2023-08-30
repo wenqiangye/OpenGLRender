@@ -31,7 +31,7 @@ struct PointLight {
 };
 
 
-#define NR_POINT_LIGHTS 2
+#define NR_POINT_LIGHTS 50
 uniform int lightcnt;
 
 uniform PointLight pointLights[NR_POINT_LIGHTS];
@@ -65,10 +65,12 @@ void main()
 {
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos-FragPos);
-    vec3 result = vec3(0.0f,0.0f,0.0f);
+    vec3 result = CalcDirLight(dirLight, norm, viewDir);
+    // vec3 result = vec3(0.0f,0.0f,0.0f);
     for(int i=0;i<lightcnt;++i) {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     }
+    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
     FragColor = vec4(result,1.0f);
 }
 

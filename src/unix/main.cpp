@@ -15,25 +15,15 @@ public:
     virtual void StartUp() final
     {
         shader = Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs");
-        lights.push_back(new PointLight(pointLightPositions[0], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 0.09f, 0.032f));
-        auto las = *(lights.end()-1);
-        setPointLight(dynamic_cast<PointLight*>(las), 0, shader);
-        LightPosition.push_back(las->postion);
-
-        lights.push_back(new PointLight(pointLightPositions[1], glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, 0.09f, 0.032f));
-        las = *(lights.end()-1);
-        setPointLight(dynamic_cast<PointLight*>(las), 1, shader);
-        LightPosition.push_back(las->postion);
-
         lights.push_back(new DirLight());
-        las = *(lights.end()-1);
+        auto las = *(lights.end()-1);
         setDirLight(dynamic_cast<DirLight*>(las), 0, shader);
         
         LightSpot* lightspot = new LightSpot();
         lightspot->postion = camera.Position;
         lightspot->direction = camera.Front;
-        lightspot->ambient = glm::vec3(0.0f,0.0f,0.0f);
-        lightspot->diffuse = glm::vec3(1.0f,1.0f,1.0f);
+        lightspot->ambient = glm::vec3(0.1f,0.1f,0.1f);
+        lightspot->diffuse = glm::vec3(0.8f,0.8f,0.8f);
         lightspot->specular = glm::vec3(1.0f,1.0f,1.0f);
         
         lights.push_back(lightspot);
@@ -57,29 +47,39 @@ public:
 
         ImGui::Begin("OpenGL Render", &control_window); // Create a window called "Hello, world!" and append into it.
 
-        // ImGui::Button("reset",ImVec2(0,0));
         if (ImGui::Button("reset", ImVec2(0, 0)))
         {
             scale = 1.0;
             translate = glm::vec3(0.0f);
             clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+            lights[1]->postion = camera.Position;
+            pointlightPos = glm::vec3(0.0f);
+            while (lights.size()>2)
+            {
+                lights.pop_back();
+            }
+            shader.use();
+            shader.setInt("lightcnt",lights.size()-2);
         }
 
         ImGui::ColorEdit3("background", (float *)&clear_color);
         ImGui::SliderFloat("scale", &scale, 0.0f, 2.0f); // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::SliderFloat3("translate", glm::value_ptr(translate), -10.0f, 10.0f);
-        ImGui::SliderFloat3("LightSpot_Pos", glm::value_ptr(lights[3]->postion),-100.0f,100.0f);
+        ImGui::SliderFloat3("LightSpot_Pos", glm::value_ptr(lights[1]->postion),-100.0f,100.0f);
         ImGui::SliderFloat3("PointLight_Pos", glm::value_ptr(pointlightPos),-1000.0f,1000.0f);
+         
         if(ImGui::Button("add pointlight", ImVec2(0, 0)))
         {
             lights.push_back(new PointLight(pointlightPos, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f));
             auto las = *(lights.end()-1);
-            setPointLight(dynamic_cast<PointLight*>(las), lights.size()-4, shader);
+            setPointLight(dynamic_cast<PointLight*>(las), lights.size()-3, shader);
+            
             shader.use();
             shader.setInt("lightcnt",lights.size()-2);
+            
             LightPosition.push_back(las->postion);
         }
-
+        ImGui::Text("Number of PointLights is %d",int(lights.size()-2));
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
     }
@@ -96,7 +96,7 @@ public:
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
         shader.setMat4("model", model);
-        shader.setFloat("time", static_cast<float>(glfwGetTime()));
+        shader.setVec3("viewPos", camera.Position);
         ourmodel.Draw(shader);
     }
 
@@ -126,7 +126,6 @@ public:
         shader.setFloat("spotLight.constant", light->constant);
         shader.setFloat("spotLight.linear", light->linear);
         shader.setFloat("spotLight.quadratic", light->quadratic);
-        shader.setVec3("viewPos", light->angles);
     }
 
     void setDirLight(DirLight *light,const int id, Shader &shader)
@@ -136,7 +135,6 @@ public:
         shader.setVec3("dirLight.diffuse", light->diffuse);
         shader.setVec3("dirLight.specular", light->specular);
         shader.setVec3("dirLight.direction", light->direction);
-        shader.setVec3("viewPos", light->angles);
     }
 
 private:

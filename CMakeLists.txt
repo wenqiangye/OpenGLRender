@@ -45,7 +45,7 @@ link_directories(
 )
 endif()
 
-find_package(Boost 1.82.0 REQUIRED COMPONENTS filesystem)
+find_package(Boost REQUIRED COMPONENTS filesystem)
 
 if(NOT Boost_FOUND)
     message("Not Found Boost")
