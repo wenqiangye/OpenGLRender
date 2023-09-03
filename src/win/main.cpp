@@ -1,5 +1,6 @@
 #include "app.hpp"
-// #include <iostream>
+#include <iostream>
+
 
 class Myapp : public App
 {
@@ -60,6 +61,6 @@ int main(int argc, char *argv[])
 {
     Myapp app;
     app.Run();
-
+    
     return 0;
 }
