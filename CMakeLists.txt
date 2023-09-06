@@ -4,7 +4,8 @@ project(openglrender)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
-set( CMAKE_EXPORT_COMPILE_COMMANDS 1 )
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui

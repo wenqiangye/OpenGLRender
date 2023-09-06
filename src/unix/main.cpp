@@ -6,6 +6,7 @@
 #include "model.h"
 #include "mesh.h"
 #include "threadpool.hpp"
+#include <iostream>
 
 
 class Myapp : public App
@@ -19,7 +20,7 @@ public:
         lights.push_back(new DirLight());
         auto las = *(lights.end()-1);
         setDirLight(dynamic_cast<DirLight*>(las), 0, shader);
-        
+         
         LightSpot* lightspot = new LightSpot();
         lightspot->postion = camera.Position;
         lightspot->direction = camera.Front;
@@ -48,6 +49,7 @@ public:
 
         ImGui::Begin("OpenGL Render", &control_window); // Create a window called "Hello, world!" and append into it.
 
+        
         if (ImGui::Button("reset", ImVec2(0, 0)))
         {
             scale = 1.0;
