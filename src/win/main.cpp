@@ -1,10 +1,14 @@
 #include "app.hpp"
+<<<<<<< HEAD
+#include <iostream>
+=======
 // #include <iostream>
 #include <boost/filesystem/path.hpp>
 #include "camera.h"
 #include "shader.h"
 #include "model.h"
 #include "mesh.h"
+>>>>>>> 42f517570ffbb6f533bdb23f926277e57027f71e
 
 
 class Myapp : public App
@@ -118,4 +122,21 @@ int main(int argc, char *argv[])
                 show_another_window = false;
             ImGui::End();
         }
+<<<<<<< HEAD
+    }
+
+private:
+    bool show_demo_window = true;
+    bool show_another_window = false;
+};
+
+int main(int argc, char *argv[])
+{
+    Myapp app;
+    app.Run();
+    
+    return 0;
+}
+=======
 */
+>>>>>>> 42f517570ffbb6f533bdb23f926277e57027f71e
