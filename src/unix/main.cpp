@@ -27,9 +27,10 @@ public:
         lightspot->ambient = glm::vec3(0.1f,0.1f,0.1f);
         lightspot->diffuse = glm::vec3(0.8f,0.8f,0.8f);
         lightspot->specular = glm::vec3(1.0f,1.0f,1.0f);
-        
+
         lights.push_back(lightspot);
-        las = *(lights.end()-1);
+        las = *(lights.end()-1)
+          ;
         setLightSpot(dynamic_cast<LightSpot*>(las),0,shader);
 
         shader.use();
