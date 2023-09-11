@@ -1,14 +1,10 @@
 #include "app.hpp"
-<<<<<<< HEAD
-#include <iostream>
-=======
 // #include <iostream>
 #include <boost/filesystem/path.hpp>
 #include "camera.h"
 #include "shader.h"
 #include "model.h"
 #include "mesh.h"
->>>>>>> 42f517570ffbb6f533bdb23f926277e57027f71e
 
 
 class Myapp : public App

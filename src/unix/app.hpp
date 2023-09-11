@@ -13,6 +13,7 @@
 #include "threadpool.hpp"
 #include "light.h"
 
+
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -79,6 +80,7 @@ public:
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // Required on Mac
 #else
+
         // GL 3.0 + GLSL 130
         const char *glsl_version = "#version 330";
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -111,6 +113,8 @@ public:
             std::cout << "Failed to initialize GLAD" << std::endl;
             exit(1);
         }
+
+        
 
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
