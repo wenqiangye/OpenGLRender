@@ -54,6 +54,7 @@ public:
         {
             meshes[i].Draw(shader);
         }
+        // glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     }
 private:
     void loadModel(string const &path)
