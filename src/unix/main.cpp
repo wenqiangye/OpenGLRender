@@ -17,25 +17,24 @@ public:
     {
         shader = Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs");
         lights.push_back(new DirLight());
-        auto las = *(lights.end()-1);
-        setDirLight(dynamic_cast<DirLight*>(las), 0, shader);
-         
-        LightSpot* lightspot = new LightSpot();
+        auto las = *(lights.end() - 1);
+        setDirLight(dynamic_cast<DirLight *>(las), 0, shader);
+
+        LightSpot *lightspot = new LightSpot();
         lightspot->postion = camera.Position;
         lightspot->direction = camera.Front;
-        lightspot->ambient = glm::vec3(0.1f,0.1f,0.1f);
-        lightspot->diffuse = glm::vec3(0.8f,0.8f,0.8f);
-        lightspot->specular = glm::vec3(1.0f,1.0f,1.0f);
+        lightspot->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+        lightspot->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
+        lightspot->specular = glm::vec3(1.0f, 1.0f, 1.0f);
 
         lights.push_back(lightspot);
-        las = *(lights.end()-1)
-          ;
-        setLightSpot(dynamic_cast<LightSpot*>(las),0,shader);
+        las = *(lights.end() - 1);
+        setLightSpot(dynamic_cast<LightSpot *>(las), 0, shader);
 
         shader.use();
         shader.setVec3("viewPos", camera.Position);
         shader.setFloat("shininess", 32.0f);
-        shader.setInt("lightcnt",lights.size()-2);
+        shader.setInt("lightcnt", lights.size() - 2);
         ourmodel = Model(boost::filesystem::absolute("../asset/model/nanosuit/nanosuit.obj").c_str());
     }
 
@@ -49,7 +48,6 @@ public:
 
         ImGui::Begin("OpenGL Render", &control_window); // Create a window called "Hello, world!" and append into it.
 
-        
         if (ImGui::Button("reset", ImVec2(0, 0)))
         {
             scale = 1.0;
@@ -57,32 +55,37 @@ public:
             clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
             lights[1]->postion = camera.Position;
             pointlightPos = glm::vec3(0.0f);
-            while (lights.size()>2)
+            while (lights.size() > 2)
             {
                 lights.pop_back();
             }
             shader.use();
-            shader.setInt("lightcnt",lights.size()-2);
+            shader.setInt("lightcnt", lights.size() - 2);
         }
 
         ImGui::ColorEdit3("background", (float *)&clear_color);
         ImGui::SliderFloat("scale", &scale, 0.0f, 2.0f); // Edit 1 float using a slider from 0.0f to 1.0f
         ImGui::SliderFloat3("translate", glm::value_ptr(translate), -10.0f, 10.0f);
-        ImGui::SliderFloat3("LightSpot_Pos", glm::value_ptr(lights[1]->postion),-100.0f,100.0f);
-        ImGui::SliderFloat3("PointLight_Pos", glm::value_ptr(pointlightPos),-1000.0f,1000.0f);
-         
-        if(ImGui::Button("add pointlight", ImVec2(0, 0)))
+        ImGui::SliderFloat3("LightSpot_Pos", glm::value_ptr(lights[1]->postion), -100.0f, 100.0f);
+        ImGui::SliderFloat3("PointLight_Pos", glm::value_ptr(pointlightPos), -1000.0f, 1000.0f);
+
+        if (ImGui::Button("add pointlight", ImVec2(0, 0)))
         {
             lights.push_back(new PointLight(pointlightPos, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.8f, 0.8f, 0.8f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f));
-            auto las = *(lights.end()-1);
-            setPointLight(dynamic_cast<PointLight*>(las), lights.size()-3, shader);
-            
+            auto las = *(lights.end() - 1);
+            setPointLight(dynamic_cast<PointLight *>(las), lights.size() - 3, shader);
+
             shader.use();
-            shader.setInt("lightcnt",lights.size()-2);
-            
+            shader.setInt("lightcnt", lights.size() - 2);
+
             LightPosition.push_back(las->postion);
         }
-        ImGui::Text("Number of PointLights is %d",int(lights.size()-2));
+
+        if (ImGui::Button("PolygonMode", ImVec2(0, 0)))
+        {
+            mode = (mode == GL_FILL ? GL_LINE : GL_FILL);
+        }
+        ImGui::Text("Number of PointLights is %d", int(lights.size() - 2));
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
     }
@@ -100,23 +103,23 @@ public:
         shader.setMat4("view", view);
         shader.setMat4("model", model);
         shader.setVec3("viewPos", camera.Position);
-        ourmodel.Draw(shader);
+        ourmodel.Draw(shader, mode);
     }
 
-    void setPointLight(PointLight *light,const int id, Shader &shader)
+    void setPointLight(PointLight *light, const int id, Shader &shader)
     {
         shader.use();
-        shader.setVec3("pointLights["+to_string(id)+"].position", light->postion);
-        shader.setVec3("pointLights["+to_string(id)+"].ambient", light->ambient);
-        shader.setVec3("pointLights["+to_string(id)+"].diffuse", light->diffuse);
-        shader.setVec3("pointLights["+to_string(id)+"].specular", light->specular);
-        shader.setFloat("pointLights["+to_string(id)+"].constant", light->constant);
-        shader.setFloat("pointLights["+to_string(id)+"].linear", light->linear);
-        shader.setFloat("pointLights["+to_string(id)+"].quadratic", light->quadratic);
+        shader.setVec3("pointLights[" + to_string(id) + "].position", light->postion);
+        shader.setVec3("pointLights[" + to_string(id) + "].ambient", light->ambient);
+        shader.setVec3("pointLights[" + to_string(id) + "].diffuse", light->diffuse);
+        shader.setVec3("pointLights[" + to_string(id) + "].specular", light->specular);
+        shader.setFloat("pointLights[" + to_string(id) + "].constant", light->constant);
+        shader.setFloat("pointLights[" + to_string(id) + "].linear", light->linear);
+        shader.setFloat("pointLights[" + to_string(id) + "].quadratic", light->quadratic);
         shader.setVec3("viewPos", light->angles);
     }
 
-    void setLightSpot(LightSpot *light,const int id, Shader &shader)
+    void setLightSpot(LightSpot *light, const int id, Shader &shader)
     {
         shader.use();
         shader.setVec3("spotLight.position", light->postion);
@@ -131,7 +134,7 @@ public:
         shader.setFloat("spotLight.quadratic", light->quadratic);
     }
 
-    void setDirLight(DirLight *light,const int id, Shader &shader)
+    void setDirLight(DirLight *light, const int id, Shader &shader)
     {
         shader.use();
         shader.setVec3("dirLight.ambient", light->ambient);
@@ -147,9 +150,10 @@ private:
     Model ourmodel;
     Shader shader;
     float scale = 1.0;
+    int mode = GL_FILL;
     glm::vec3 translate = glm::vec3(0.0f);
     glm::vec3 pointlightPos = glm::vec3(0.0f);
-    std::vector<Light*>lights;
+    std::vector<Light *> lights;
     std::vector<glm::vec3> LightPosition;
     glm::vec3 pointLightPositions[4] = {
         glm::vec3(10.0f, 10.0f, 10.0f),
