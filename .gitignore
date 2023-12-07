@@ -3,3 +3,4 @@ bin/
 .vscode/
 .cache/
 .vs/
+.clang-format
