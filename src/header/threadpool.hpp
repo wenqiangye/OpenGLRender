@@ -6,6 +6,7 @@
 #include <thread>
 #include <vector>
 
+// std:: make_unique in c++ 14 use this template replace
 template <typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args &&... args) {
   return std::unique_ptr<T>(new T(std::forward<Args>(args)...));  // 完美转发
@@ -71,7 +72,7 @@ class ThreadPool {
   void setThreadCount(uint32_t count) {
     threads.clear();
     for (auto i = 0; i < count; ++i) {
-      threads.push_back(std::make_unique<Thread>());
+      threads.push_back(make_unique<Thread>());
     }
   }
 
