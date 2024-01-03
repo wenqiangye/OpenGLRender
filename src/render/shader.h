@@ -15,8 +15,6 @@
 #include <iterator>
 #include <sstream>
 
-using namespace std;
-
 class Shader {
  public:
   unsigned int ID;

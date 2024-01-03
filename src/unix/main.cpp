@@ -112,18 +112,19 @@ class Myapp : public App {
 
   void setPointLight(PointLight *light, const int id, Shader &shader) {
     shader.use();
-    shader.setVec3("pointLights[" + to_string(id) + "].position",
+    shader.setVec3("pointLights[" + std::to_string(id) + "].position",
                    light->postion);
-    shader.setVec3("pointLights[" + to_string(id) + "].ambient",
+    shader.setVec3("pointLights[" + std::to_string(id) + "].ambient",
                    light->ambient);
-    shader.setVec3("pointLights[" + to_string(id) + "].diffuse",
+    shader.setVec3("pointLights[" + std::to_string(id) + "].diffuse",
                    light->diffuse);
-    shader.setVec3("pointLights[" + to_string(id) + "].specular",
+    shader.setVec3("pointLights[" + std::to_string(id) + "].specular",
                    light->specular);
-    shader.setFloat("pointLights[" + to_string(id) + "].constant",
+    shader.setFloat("pointLights[" + std::to_string(id) + "].constant",
                     light->constant);
-    shader.setFloat("pointLights[" + to_string(id) + "].linear", light->linear);
-    shader.setFloat("pointLights[" + to_string(id) + "].quadratic",
+    shader.setFloat("pointLights[" + std::to_string(id) + "].linear",
+                    light->linear);
+    shader.setFloat("pointLights[" + std::to_string(id) + "].quadratic",
                     light->quadratic);
     shader.setVec3("viewPos", light->angles);
   }

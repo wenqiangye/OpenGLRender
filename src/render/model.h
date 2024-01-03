@@ -25,21 +25,19 @@
 #include "shader.h"
 #include "stb_image.h"
 
-using namespace std;
-
-unsigned int TextureFromFile(const char *path, const string &directory,
+unsigned int TextureFromFile(const char *path, const std::string &directory,
                              bool gamma = false);
 
 class Model {
  public:
   // model data
-  vector<Texture> textures_loaded;
-  vector<Mesh> meshes;
-  string directory;
+  std::vector<Texture> textures_loaded;
+  std::vector<Mesh> meshes;
+  std::string directory;
   bool gammaCorrection;
 
   Model() {}
-  Model(string const &path, bool gamma = false) : gammaCorrection(gamma) {
+  Model(std::string const &path, bool gamma = false) : gammaCorrection(gamma) {
     loadModel(path);
   }
 
@@ -52,7 +50,7 @@ class Model {
   }
 
  private:
-  void loadModel(string const &path) {
+  void loadModel(std::string const &path) {
     Assimp::Importer importer;
 
     const aiScene *scene = importer.ReadFile(
@@ -60,7 +58,7 @@ class Model {
                   aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
         !scene->mRootNode) {
-      cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+      std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
       return;
     }
     directory = path.substr(0, path.find_last_of('/'));
@@ -79,9 +77,9 @@ class Model {
   }
 
   Mesh processMesh(aiMesh *mesh, const aiScene *scene) {
-    vector<Vertex> vertices;
-    vector<unsigned int> indices;
-    vector<Texture> textures;
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture> textures;
 
     for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
       Vertex vertex;
@@ -128,28 +126,28 @@ class Model {
 
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-    vector<Texture> diffuseMaps = loadMarerialTextures(
+    std::vector<Texture> diffuseMaps = loadMarerialTextures(
         material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    vector<Texture> specularMaps = loadMarerialTextures(
+    std::vector<Texture> specularMaps = loadMarerialTextures(
         material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-    vector<Texture> normalMaps =
+    std::vector<Texture> normalMaps =
         loadMarerialTextures(material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-    vector<Texture> heightMaps =
+    std::vector<Texture> heightMaps =
         loadMarerialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     return Mesh(vertices, indices, textures);
   }
 
-  vector<Texture> loadMarerialTextures(aiMaterial *mat, aiTextureType type,
-                                       string typeName) {
-    vector<Texture> textures;
+  std::vector<Texture> loadMarerialTextures(aiMaterial *mat, aiTextureType type,
+                                            std::string typeName) {
+    std::vector<Texture> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); ++i) {
       aiString str;
       mat->GetTexture(type, i, &str);
@@ -175,9 +173,9 @@ class Model {
   }
 };
 
-unsigned int TextureFromFile(const char *path, const string &directory,
+unsigned int TextureFromFile(const char *path, const std::string &directory,
                              bool gamma) {
-  string filename = string(path);
+  std::string filename = std::string(path);
   filename = directory + '/' + filename;
 
   unsigned int textureID;
