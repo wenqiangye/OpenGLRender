@@ -51,7 +51,7 @@ class Mesh {
     setupMesh();
   }
 
-  void Draw(Shader &shader) {
+  void Draw(std::shared_ptr<Shader> &shader) {
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
     unsigned int normalNr = 1;
@@ -72,7 +72,7 @@ class Mesh {
         number = std::to_string(heightNr++);
       }
 
-      shader.setInt(name + number, i);
+      shader.get()->setInt(name + number, i);
       glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
 

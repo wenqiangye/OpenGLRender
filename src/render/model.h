@@ -40,8 +40,9 @@ class Model {
   Model(std::string const &path, bool gamma = false) : gammaCorrection(gamma) {
     loadModel(path);
   }
+  ~Model() {}
 
-  void Draw(Shader &shader, const int mode) {
+  void Draw(std::shared_ptr<Shader> &shader, const int mode) {
     for (unsigned int i = 0; i < meshes.size(); ++i) {
       meshes[i].Draw(shader);
     }

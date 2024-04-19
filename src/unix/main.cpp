@@ -21,8 +21,8 @@ class Myapp : public App {
   Myapp() = default;
   ~Myapp() = default;
   virtual void StartUp() final {
-    shader =
-        Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs");
+    shader = std::make_shared<Shader>(
+        Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs"));
     lights.push_back(new DirLight());
     auto las = *(lights.end() - 1);
     setDirLight(dynamic_cast<DirLight *>(las), 0, shader);
@@ -33,18 +33,17 @@ class Myapp : public App {
     lightspot->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
     lightspot->diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
     lightspot->specular = glm::vec3(1.0f, 1.0f, 1.0f);
-
     lights.push_back(lightspot);
     las = *(lights.end() - 1);
     setLightSpot(dynamic_cast<LightSpot *>(las), 0, shader);
 
-    shader.use();
-    shader.setVec3("viewPos", camera.Position);
-    shader.setFloat("shininess", 32.0f);
-    shader.setInt("lightcnt", lights.size() - 2);
-    ourmodel = Model(
+    shader.get()->use();
+    shader.get()->setVec3("viewPos", camera.Position);
+    shader.get()->setFloat("shininess", 32.0f);
+    shader.get()->setInt("lightcnt", lights.size() - 2);
+    ourmodel = std::make_shared<Model>(Model(
         boost::filesystem::absolute("../asset/model/nanosuit/nanosuit.obj")
-            .c_str());
+            .c_str()));
   }
 
   virtual void Update() final {
@@ -66,8 +65,8 @@ class Myapp : public App {
       while (lights.size() > 2) {
         lights.pop_back();
       }
-      shader.use();
-      shader.setInt("lightcnt", lights.size() - 2);
+      shader.get()->use();
+      shader.get()->setInt("lightcnt", lights.size() - 2);
     }
 
     ImGui::ColorEdit3("background", (float *)&clear_color);
@@ -87,8 +86,8 @@ class Myapp : public App {
       auto las = *(lights.end() - 1);
       setPointLight(dynamic_cast<PointLight *>(las), lights.size() - 3, shader);
 
-      shader.use();
-      shader.setInt("lightcnt", lights.size() - 2);
+      shader.get()->use();
+      shader.get()->setInt("lightcnt", lights.size() - 2);
 
       LightPosition.push_back(las->postion);
     }
@@ -110,61 +109,66 @@ class Myapp : public App {
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::scale(model, glm::vec3(scale, scale, scale));
     view = glm::translate(view, translate);
-    shader.use();
-    shader.setMat4("projection", projection);
-    shader.setMat4("view", view);
-    shader.setMat4("model", model);
-    shader.setVec3("viewPos", camera.Position);
-    ourmodel.Draw(shader, mode);
+    shader.get()->use();
+    shader.get()->setMat4("projection", projection);
+    shader.get()->setMat4("view", view);
+    shader.get()->setMat4("model", model);
+    shader.get()->setVec3("viewPos", camera.Position);
+    ourmodel.get()->Draw(shader, mode);
   }
 
-  void setPointLight(PointLight *light, const int id, Shader &shader) {
-    shader.use();
-    shader.setVec3("pointLights[" + std::to_string(id) + "].position",
-                   light->postion);
-    shader.setVec3("pointLights[" + std::to_string(id) + "].ambient",
-                   light->ambient);
-    shader.setVec3("pointLights[" + std::to_string(id) + "].diffuse",
-                   light->diffuse);
-    shader.setVec3("pointLights[" + std::to_string(id) + "].specular",
-                   light->specular);
-    shader.setFloat("pointLights[" + std::to_string(id) + "].constant",
-                    light->constant);
-    shader.setFloat("pointLights[" + std::to_string(id) + "].linear",
-                    light->linear);
-    shader.setFloat("pointLights[" + std::to_string(id) + "].quadratic",
-                    light->quadratic);
-    shader.setVec3("viewPos", light->angles);
+  void setPointLight(PointLight *light, const int id,
+                     std::shared_ptr<Shader> &shader) {
+    shader.get()->use();
+    shader.get()->setVec3("pointLights[" + std::to_string(id) + "].position",
+                          light->postion);
+    shader.get()->setVec3("pointLights[" + std::to_string(id) + "].ambient",
+                          light->ambient);
+    shader.get()->setVec3("pointLights[" + std::to_string(id) + "].diffuse",
+                          light->diffuse);
+    shader.get()->setVec3("pointLights[" + std::to_string(id) + "].specular",
+                          light->specular);
+    shader.get()->setFloat("pointLights[" + std::to_string(id) + "].constant",
+                           light->constant);
+    shader.get()->setFloat("pointLights[" + std::to_string(id) + "].linear",
+                           light->linear);
+    shader.get()->setFloat("pointLights[" + std::to_string(id) + "].quadratic",
+                           light->quadratic);
+    shader.get()->setVec3("viewPos", light->angles);
   }
 
-  void setLightSpot(LightSpot *light, const int id, Shader &shader) {
-    shader.use();
-    shader.setVec3("spotLight.position", light->postion);
-    shader.setVec3("spotLight.ambient", light->ambient);
-    shader.setVec3("spotLight.diffuse", light->diffuse);
-    shader.setVec3("spotLight.specular", light->specular);
-    shader.setVec3("spotLight.direction", light->direction);
-    shader.setFloat("spotLight.cosPhyInner", light->cosPhyInner);
-    shader.setFloat("spotLight.cosPhyOuter", light->cosPhyOuter);
-    shader.setFloat("spotLight.constant", light->constant);
-    shader.setFloat("spotLight.linear", light->linear);
-    shader.setFloat("spotLight.quadratic", light->quadratic);
+  void setLightSpot(LightSpot *light, const int id,
+                    std::shared_ptr<Shader> &shader) {
+    shader.get()->use();
+    shader.get()->setVec3("spotLight.position", light->postion);
+    shader.get()->setVec3("spotLight.ambient", light->ambient);
+    shader.get()->setVec3("spotLight.diffuse", light->diffuse);
+    shader.get()->setVec3("spotLight.specular", light->specular);
+    shader.get()->setVec3("spotLight.direction", light->direction);
+    shader.get()->setFloat("spotLight.cosPhyInner", light->cosPhyInner);
+    shader.get()->setFloat("spotLight.cosPhyOuter", light->cosPhyOuter);
+    shader.get()->setFloat("spotLight.constant", light->constant);
+    shader.get()->setFloat("spotLight.linear", light->linear);
+    shader.get()->setFloat("spotLight.quadratic", light->quadratic);
   }
 
-  void setDirLight(DirLight *light, const int id, Shader &shader) {
-    shader.use();
-    shader.setVec3("dirLight.ambient", light->ambient);
-    shader.setVec3("dirLight.diffuse", light->diffuse);
-    shader.setVec3("dirLight.specular", light->specular);
-    shader.setVec3("dirLight.direction", light->direction);
+  void setDirLight(DirLight *light, const int id,
+                   std::shared_ptr<Shader> &shader) {
+    shader.get()->use();
+    shader.get()->setVec3("dirLight.ambient", light->ambient);
+    shader.get()->setVec3("dirLight.diffuse", light->diffuse);
+    shader.get()->setVec3("dirLight.specular", light->specular);
+    shader.get()->setVec3("dirLight.direction", light->direction);
   }
 
  private:
   bool control_window = true;
   bool render_window = true;
   bool show_demo_window = false;
-  Model ourmodel;
-  Shader shader;
+  std::shared_ptr<Model> ourmodel;
+  std::shared_ptr<Shader> shader;
+  // Model ourmodel;
+  // Shader shader;
   float scale = 1.0;
   int mode = GL_FILL;
   glm::vec3 translate = glm::vec3(0.0f);
@@ -174,6 +178,9 @@ class Myapp : public App {
   glm::vec3 pointLightPositions[4] = {
       glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(5.0f, -5.0f, 4.0f),
       glm::vec3(-4.0f, 2.0f, -12.0f), glm::vec3(0.0f, 0.0f, -3.0f)};
+
+  // pbr material
+  
 };
 
 int main(int argc, char *argv[]) {
