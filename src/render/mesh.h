@@ -51,7 +51,7 @@ class Mesh {
     setupMesh();
   }
 
-  void Draw(std::shared_ptr<Shader> &shader) {
+  void Draw(std::unique_ptr<Shader> &shader) {
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
     unsigned int normalNr = 1;

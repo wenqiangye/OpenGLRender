@@ -42,7 +42,7 @@ class Model {
   }
   ~Model() {}
 
-  void Draw(std::shared_ptr<Shader> &shader, const int mode) {
+  void Draw(std::unique_ptr<Shader> &shader, const int mode) {
     for (unsigned int i = 0; i < meshes.size(); ++i) {
       meshes[i].Draw(shader);
     }

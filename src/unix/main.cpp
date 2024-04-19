@@ -21,7 +21,7 @@ class Myapp : public App {
   Myapp() = default;
   ~Myapp() = default;
   virtual void StartUp() final {
-    shader = std::make_shared<Shader>(
+    shader = make_unique<Shader>(
         Shader("../src/shader/baopo/baopo.vs", "../src/shader/baopo/baopo.fs"));
     lights.push_back(new DirLight());
     auto las = *(lights.end() - 1);
@@ -41,7 +41,7 @@ class Myapp : public App {
     shader.get()->setVec3("viewPos", camera.Position);
     shader.get()->setFloat("shininess", 32.0f);
     shader.get()->setInt("lightcnt", lights.size() - 2);
-    ourmodel = std::make_shared<Model>(Model(
+    ourmodel = make_unique<Model>(Model(
         boost::filesystem::absolute("../asset/model/nanosuit/nanosuit.obj")
             .c_str()));
   }
@@ -118,7 +118,7 @@ class Myapp : public App {
   }
 
   void setPointLight(PointLight *light, const int id,
-                     std::shared_ptr<Shader> &shader) {
+                     std::unique_ptr<Shader> &shader) {
     shader.get()->use();
     shader.get()->setVec3("pointLights[" + std::to_string(id) + "].position",
                           light->postion);
@@ -138,7 +138,7 @@ class Myapp : public App {
   }
 
   void setLightSpot(LightSpot *light, const int id,
-                    std::shared_ptr<Shader> &shader) {
+                    std::unique_ptr<Shader> &shader) {
     shader.get()->use();
     shader.get()->setVec3("spotLight.position", light->postion);
     shader.get()->setVec3("spotLight.ambient", light->ambient);
@@ -153,7 +153,7 @@ class Myapp : public App {
   }
 
   void setDirLight(DirLight *light, const int id,
-                   std::shared_ptr<Shader> &shader) {
+                   std::unique_ptr<Shader> &shader) {
     shader.get()->use();
     shader.get()->setVec3("dirLight.ambient", light->ambient);
     shader.get()->setVec3("dirLight.diffuse", light->diffuse);
@@ -165,10 +165,10 @@ class Myapp : public App {
   bool control_window = true;
   bool render_window = true;
   bool show_demo_window = false;
-  std::shared_ptr<Model> ourmodel;
-  std::shared_ptr<Shader> shader;
-  // Model ourmodel;
-  // Shader shader;
+
+  std::unique_ptr<Model> ourmodel;
+  std::unique_ptr<Shader> shader;
+
   float scale = 1.0;
   int mode = GL_FILL;
   glm::vec3 translate = glm::vec3(0.0f);
@@ -180,7 +180,6 @@ class Myapp : public App {
       glm::vec3(-4.0f, 2.0f, -12.0f), glm::vec3(0.0f, 0.0f, -3.0f)};
 
   // pbr material
-  
 };
 
 int main(int argc, char *argv[]) {
