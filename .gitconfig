@@ -1,0 +1,7 @@
+[user]
+    name = yesky
+    email = a316606581@gmail.com
+[http]
+    proxy = http://127.0.0.1:7890
+[https]
+    proxy = https://127.0.0.1:7890

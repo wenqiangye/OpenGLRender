@@ -9,6 +9,7 @@
 #include <boost/filesystem/path.hpp>
 #include <iostream>
 
+#include "../base/Loger.h"
 #include "app.hpp"
 #include "camera.h"
 #include "mesh.h"
@@ -183,6 +184,8 @@ class Myapp : public App {
 };
 
 int main(int argc, char *argv[]) {
+  LOG_BASE::LOG *Log = LOG_BASE::LOG::getInstance();
+  Log->add_log(LOG_BASE::LOGLEVEL::LOG_LEVEL_INFO, "Start_Project!");
   Myapp app;
   app.Run();
   return 0;
