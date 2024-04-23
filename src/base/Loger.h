@@ -1,7 +1,7 @@
 /*
  * @Author: yesky a316606581@gmail.com
  * @LastEditors: yesky a316606581@gmail.com
- * @LastEditTime: 2024-04-23 14:44:58
+ * @LastEditTime: 2024-04-23 16:08:04
  * @Date: 2024-04-21 13:36:15
  * @FilePath: Loger.h
  * @Description: a simple logger
@@ -13,12 +13,12 @@
 #include <condition_variable>
 #include <ctime>
 #include <fstream>
-#include <sstream>
 #include <functional>
 #include <iomanip>
 #include <iostream>
 #include <mutex>
 #include <queue>
+#include <sstream>
 #include <thread>
 
 namespace LOG_BASE {
@@ -113,3 +113,8 @@ class LOG {
   std::function<void(std::pair<LOGLEVEL, std::string>)> _handle;
 };
 }  // namespace LOG_BASE
+
+#define LOG_DEBUG(format, ...) { LOG_BASE::LOG::getInstance()->add_log(format, ##__VA_ARGS__); }
+#define LOG_INFO(format, ...)  { LOG_BASE::LOG::getInstance()->add_log(format, ##__VA_ARGS__); }
+#define LOG_WARN(format, ...)  { LOG_BASE::LOG::getInstance()->add_log(format, ##__VA_ARGS__); }
+#define LOG_ERROR(format, ...) { LOG_BASE::LOG::getInstance()->add_log(format, ##__VA_ARGS__); }
