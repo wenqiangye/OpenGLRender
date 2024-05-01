@@ -1,7 +1,7 @@
 /*
  * @Author: yesky a316606581@gmail.com
  * @LastEditors: yesky a316606581@gmail.com
- * @LastEditTime: 2024-04-23 15:47:46
+ * @LastEditTime: 2024-05-01 11:58:45
  * @Date: 2024-04-21 12:41:12
  * @FilePath: Loger.cpp
  * @Description:
@@ -101,14 +101,14 @@ void LOG_BASE::LOG::worker() {
       _queue.pop();
     }
 
-    //输出到文件
-    std::ofstream out(_path, std::ios_base::app);
-    if (!out.good())
-    {
-        continue;
-    }
-    out << get_current_timestamp() <<"  "<<level2string(pair.first) <<":"<<
-    pair.second << std::endl; out.close();
+    // //输出到文件
+    // std::ofstream out(_path, std::ios_base::app);
+    // if (!out.good())
+    // {
+    //     continue;
+    // }
+    // out << get_current_timestamp() <<"  "<<level2string(pair.first) <<":"<<
+    // pair.second << std::endl; out.close();
 
     // 如果文件流不可用，则重新尝试打开
     if (!_file.is_open()) {

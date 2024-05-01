@@ -184,8 +184,7 @@ class Myapp : public App {
 };
 
 int main(int argc, char *argv[]) {
-  LOG_BASE::LOG *Log = LOG_BASE::LOG::getInstance();
-  LOG_DEBUG(LOG_BASE::LOGLEVEL::LOG_LEVEL_DEBUG,"Start Project!");
+  LOG_DEBUG(LOG_BASE::LOGLEVEL::LOG_LEVEL_DEBUG, "Start Project!");
   Myapp app;
   app.Run();
   return 0;
